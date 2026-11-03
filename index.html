@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Una pequeña pregunta para alguien muy especial."
+    />
+    <meta name="theme-color" content="#fff6f5" />
+    <title>¿Me perdonas?</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #49363a;
+        background: #fff6f5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background:
+          radial-gradient(ellipse at 14% 20%, #ffe1e7 0, transparent 34%),
+          radial-gradient(ellipse at 87% 78%, #ffe9dc 0, transparent 36%),
+          #fff8f4;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .page {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        min-height: 100vh;
+        padding: 24px;
+        isolation: isolate;
+      }
+
+      .decoration {
+        position: absolute;
+        z-index: -1;
+        color: #f3b6c1;
+        opacity: 0.6;
+        user-select: none;
+        animation: float 5s ease-in-out infinite;
+      }
+
+      .decoration-one {
+        top: 14%;
+        left: 17%;
+        font-size: 30px;
+        transform: rotate(-15deg);
+      }
+
+      .decoration-two {
+        right: 16%;
+        bottom: 17%;
+        font-size: 38px;
+        animation-delay: -2s;
+      }
+
+      .decoration-three {
+        top: 22%;
+        right: 23%;
+        font-size: 18px;
+        animation-delay: -1s;
+      }
+
+      .card {
+        width: min(100%, 390px);
+        padding: 34px 30px 30px;
+        border: 1px solid rgb(255 255 255 / 85%);
+        border-radius: 30px;
+        background: rgb(255 255 255 / 83%);
+        box-shadow:
+          0 24px 70px rgb(131 72 83 / 12%),
+          0 4px 14px rgb(131 72 83 / 5%);
+        text-align: center;
+        backdrop-filter: blur(12px);
+        animation: arrive 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+
+      .eyebrow {
+        margin: 0 0 9px;
+        color: #d7788b;
+        font-size: 0.73rem;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: #49363a;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.15rem, 9vw, 2.85rem);
+        font-weight: 700;
+        letter-spacing: -0.055em;
+        line-height: 1.08;
+      }
+
+      .portrait {
+        display: grid;
+        place-items: center;
+        width: 182px;
+        height: 182px;
+        margin: 24px auto 19px;
+        overflow: hidden;
+        border: 7px solid #fff;
+        border-radius: 27px;
+        background: linear-gradient(145deg, #fff2dd, #ffe2e9);
+        box-shadow: 0 10px 24px rgb(157 94 105 / 13%);
+      }
+
+      .cat {
+        width: 152px;
+        height: 152px;
+        object-fit: cover;
+        transform-origin: 50% 80%;
+        animation: bob 3.2s ease-in-out infinite;
+      }
+
+      .portrait picture {
+        display: contents;
+      }
+
+      .message {
+        margin: 0;
+        color: #68575a;
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .message strong {
+        color: #49363a;
+      }
+
+      .question {
+        display: block;
+        margin-top: 5px;
+        color: #d7788b;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.14rem;
+        font-style: italic;
+      }
+
+      .actions {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 13px;
+        min-height: 100px;
+        margin-top: 23px;
+      }
+
+      .actions.no-escaped {
+        min-height: 145px;
+        align-items: flex-start;
+      }
+
+      .answer {
+        min-width: 112px;
+        min-height: 47px;
+        padding: 12px 20px;
+        border: 0;
+        border-radius: 999px;
+        color: white;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 800;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          background 180ms ease;
+      }
+
+      .answer:focus-visible {
+        outline: 3px solid #49363a;
+        outline-offset: 4px;
+      }
+
+      .answer:hover {
+        transform: translateY(-2px);
+      }
+
+      .yes {
+        background: linear-gradient(135deg, #ef8798, #df6680);
+        box-shadow: 0 7px 15px rgb(221 100 126 / 27%);
+      }
+
+      .yes:hover {
+        box-shadow: 0 10px 20px rgb(221 100 126 / 35%);
+      }
+
+      .no {
+        background: #f1e9e9;
+        color: #79686b;
+      }
+
+      .signature {
+        margin: 23px 0 0;
+        color: #b7a5a7;
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+      }
+
+      .download-link {
+        display: inline-block;
+        margin-top: 12px;
+        color: #bf6478;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-decoration-color: #e8b3bd;
+        text-underline-offset: 3px;
+      }
+
+      .download-link:focus-visible {
+        border-radius: 3px;
+        outline: 2px solid #49363a;
+        outline-offset: 4px;
+      }
+
+      .success .portrait {
+        background: linear-gradient(145deg, #ffe5e9, #ffdbb9);
+        width: min(100%, 182px);
+        height: auto;
+        aspect-ratio: 768 / 1365;
+      }
+
+      .success .cat {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        animation: none;
+      }
+
+      .success .signature {
+        display: none;
+      }
+
+      .compensation-dialog {
+        width: min(440px, calc(100% - 32px));
+        max-height: min(90vh, 760px);
+        padding: 30px;
+        overflow-y: auto;
+        border: 1px solid rgb(255 255 255 / 90%);
+        border-radius: 26px;
+        color: #49363a;
+        background: #fffaf8;
+        box-shadow: 0 24px 80px rgb(73 54 58 / 25%);
+      }
+
+      .compensation-dialog::backdrop {
+        background: rgb(62 39 45 / 48%);
+        backdrop-filter: blur(4px);
+      }
+
+      .dialog-close {
+        display: block;
+        width: 38px;
+        height: 38px;
+        margin: -12px -12px 12px auto;
+        border: 0;
+        border-radius: 50%;
+        color: #79686b;
+        background: #f5eaea;
+        cursor: pointer;
+        font-size: 1.4rem;
+      }
+
+      .dialog-title {
+        margin: 0 0 20px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.7rem, 7vw, 2.15rem);
+        line-height: 1.15;
+        text-align: center;
+      }
+
+      .choice-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      .choice-list legend {
+        margin-bottom: 12px;
+        color: #806b70;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-height: 48px;
+        padding: 11px 13px;
+        border: 1px solid #f1dfe2;
+        border-radius: 14px;
+        background: white;
+        cursor: pointer;
+        line-height: 1.35;
+      }
+
+      .choice:has(input:checked) {
+        border-color: #df8293;
+        background: #fff1f3;
+      }
+
+      .choice input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+        accent-color: #df6680;
+      }
+
+      .other-choice {
+        width: 100%;
+        min-height: 42px;
+        margin-top: 9px;
+        padding: 9px 11px;
+        border: 1px solid #e8dadd;
+        border-radius: 10px;
+        font: inherit;
+      }
+
+      .other-choice:focus-visible,
+      .dialog-close:focus-visible {
+        outline: 3px solid #49363a;
+        outline-offset: 3px;
+      }
+
+      .appointment-form {
+        display: grid;
+        gap: 14px;
+      }
+
+      .appointment-intro {
+        margin: 0 0 4px;
+        color: #806b70;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      .appointment-field {
+        display: grid;
+        gap: 7px;
+        color: #68575a;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .appointment-field input {
+        width: 100%;
+        min-height: 46px;
+        padding: 9px 11px;
+        border: 1px solid #e8dadd;
+        border-radius: 10px;
+        background: white;
+        color: #49363a;
+        font: inherit;
+      }
+
+      .appointment-field input:focus-visible {
+        outline: 3px solid #49363a;
+        outline-offset: 3px;
+      }
+
+      .appointment-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .appointment-actions .answer {
+        flex: 1;
+      }
+
+      .dialog-back {
+        border: 1px solid #ecdde0;
+        color: #79686b;
+        background: #f5eaea;
+      }
+
+      .dialog-submit {
+        width: 100%;
+        margin-top: 18px;
+        border: 0;
+        border-radius: 999px;
+        color: white;
+        background: linear-gradient(135deg, #ef8798, #df6680);
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      .dialog-confirmation {
+        margin: 0;
+        color: #68575a;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      .dialog-confirmation[data-state="error"] {
+        color: #a63d51;
+      }
+
+      .dialog-confirmation[data-state="success"] {
+        color: #347652;
+      }
+
+      .confetti {
+        position: fixed;
+        z-index: 3;
+        top: -30px;
+        left: var(--left);
+        color: var(--color);
+        font-size: var(--size);
+        pointer-events: none;
+        animation: fall var(--duration) linear forwards;
+      }
+
+      @keyframes arrive {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        50% {
+          translate: 0 -12px;
+        }
+      }
+
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(-5px) rotate(2deg);
+        }
+      }
+
+      @keyframes celebrate {
+        from {
+          transform: rotate(-7deg) scale(1);
+        }
+        to {
+          transform: rotate(7deg) scale(1.05);
+        }
+      }
+
+      @keyframes fall {
+        to {
+          transform: translate3d(var(--drift), 110vh, 0) rotate(540deg);
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .page {
+          padding: 18px;
+        }
+
+        .card {
+          padding: 30px 23px 25px;
+          border-radius: 26px;
+        }
+
+        .portrait {
+          width: 164px;
+          height: 164px;
+          margin-top: 21px;
+        }
+
+        .cat {
+          width: 140px;
+          height: 140px;
+        }
+
+        .decoration-one {
+          left: 7%;
+        }
+
+        .decoration-two {
+          right: 6%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <span class="decoration decoration-one" aria-hidden="true">♡</span>
+      <span class="decoration decoration-two" aria-hidden="true">♡</span>
+      <span class="decoration decoration-three" aria-hidden="true">✦</span>
+
+      <section class="card" id="card" aria-labelledby="title">
+        <p class="eyebrow">Una pregunta importante</p>
+        <h1 id="title">¿Me perdonas?</h1>
+
+        <div class="portrait" role="img" aria-label="Un gatito tierno">
+          <img
+            class="cat"
+            id="cat-image"
+            src="assets/gatito-perdon.png"
+            alt=""
+          />
+        </div>
+
+        <p class="message" id="message">
+          Sé que me equivoqué y lo siento mucho.
+          <strong>¿Me das otra oportunidad?</strong>
+          <span class="question">Prometo hacerlo mejor ✨</span>
+        </p>
+
+        <div class="actions" id="actions">
+          <button class="answer yes" id="yes" type="button">Sí, te perdono</button>
+          <button class="answer no" id="no" type="button">No</button>
+        </div>
+
+        
+        <p class="signature" id="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <dialog
+      class="compensation-dialog"
+      id="compensation-dialog"
+      aria-labelledby="dialog-title"
+    >
+      <button
+        class="dialog-close"
+        id="dialog-close"
+        type="button"
+        aria-label="Cerrar"
+      >×</button>
+      <p class="eyebrow">Quiero hacerte feliz</p>
+      <h2 class="dialog-title" id="dialog-title">¿Cómo puedo compensártelo?</h2>
+      <form id="compensation-form">
+        <fieldset class="choice-list">
+          <legend>Elige lo que más te gustaría 💖</legend>
+          <label class="choice">
+            <input type="radio" name="compensation" value="Una ida al cine" required />
+            Una ida al cine
+          </label>
+          <label class="choice">
+            <input type="radio" name="compensation" value="Ir de compras" />
+            Ir de compras
+          </label>
+          <label class="choice">
+            <input type="radio" name="compensation" value="Ir a Calaverandia" />
+            Ir a Calaverandia
+          </label>
+          <label class="choice">
+            <input type="radio" name="compensation" value="Un detalle sorpresa" />
+            Un detalle sorpresa
+          </label>
+          <div class="choice">
+            <input
+              type="radio"
+              id="other-choice-radio"
+              name="compensation"
+              value="Otra idea"
+            />
+            <label for="other-choice-radio">Otra idea</label>
+          </div>
+          <input
+            class="other-choice"
+            id="other-choice"
+            type="text"
+            placeholder="Escribe tu idea"
+            aria-label="Escribe otra idea"
+            disabled
+          />
+        </fieldset>
+        <button class="answer dialog-submit" type="submit">Elegir esta opción</button>
+      </form>
+      <form class="appointment-form" id="appointment-form" hidden>
+        <p class="appointment-intro" id="appointment-intro"></p>
+        <label class="appointment-field" for="appointment-date">
+          Elige el día
+          <input id="appointment-date" name="date" type="date" required />
+        </label>
+        <label class="appointment-field" for="appointment-time">
+          Elige la hora
+          <input id="appointment-time" name="time" type="time" required />
+        </label>
+        <div class="appointment-actions">
+          <button class="answer dialog-back" id="appointment-back" type="button">Volver</button>
+          <button class="answer dialog-submit" id="appointment-send" type="submit">
+            Enviar respuesta
+          </button>
+        </div>
+      </form>
+      <p
+        class="dialog-confirmation"
+        id="dialog-confirmation"
+        aria-live="polite"
+        hidden
+      ></p>
+    </dialog>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+      defer
+    ></script>
+    <script>
+      const card = document.querySelector("#card");
+      const title = document.querySelector("#title");
+      const message = document.querySelector("#message");
+      const actions = document.querySelector("#actions");
+      const catImage = document.querySelector("#cat-image");
+      const yesButton = document.querySelector("#yes");
+      const noButton = document.querySelector("#no");
+      const status = document.querySelector("#status");
+      const compensationDialog = document.querySelector("#compensation-dialog");
+      const compensationForm = document.querySelector("#compensation-form");
+      const appointmentForm = document.querySelector("#appointment-form");
+      const appointmentIntro = document.querySelector("#appointment-intro");
+      const appointmentDate = document.querySelector("#appointment-date");
+      const appointmentTime = document.querySelector("#appointment-time");
+      const appointmentSend = document.querySelector("#appointment-send");
+      const dialogTitle = document.querySelector("#dialog-title");
+      const dialogConfirmation = document.querySelector("#dialog-confirmation");
+      const otherChoice = document.querySelector("#other-choice");
+      const emailConfig = {
+        serviceId: "service_p6su5dy",
+        templateId: "template_ju8lhhm",
+        publicKey: "S2ZNiJEKxirUPkdsp",
+      };
+      const catImages = [
+        {
+          src: "assets/gatito-perdon.png",
+          description: "Un gatito tierno",
+        },
+        {
+          src: "assets/gatito-perdon-2.png",
+          description: "Un gatito blanco con cara tierna",
+        },
+        {
+          src: "assets/gatito-perdon-3.png",
+          description: "Un gatito mirando un teléfono",
+        },
+      ];
+      const preloadedImages = catImages.map(({ src }) => {
+        const image = new Image();
+        image.src = src;
+        return image;
+      });
+      let noAttempts = 0;
+      let forgivenessAccepted = false;
+      let selectedCompensation = "";
+
+      function showDialogMessage(message, state) {
+        dialogConfirmation.textContent = message;
+        dialogConfirmation.dataset.state = state;
+        dialogConfirmation.hidden = false;
+      }
+
+      function localDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function moveNoButton() {
+        noAttempts += 1;
+        const currentImageIndex = noAttempts % catImages.length;
+        const currentImage = catImages[currentImageIndex];
+        catImage.src = preloadedImages[currentImageIndex].src;
+        document
+          .querySelector(".portrait")
+          .setAttribute("aria-label", currentImage.description);
+
+        const messages = ["¿Segura? 🥺", "Piénsalo otra vez 💭", "¿Y si mejor sí? 💗"];
+        noButton.textContent = messages[(noAttempts - 1) % messages.length];
+        status.textContent = "Esa respuesta se está haciendo difícil de alcanzar…";
+
+        const bounds = actions.getBoundingClientRect();
+        const buttonBounds = noButton.getBoundingClientRect();
+        const padding = 8;
+        actions.classList.add("no-escaped");
+        const yesBounds = yesButton.getBoundingClientRect();
+        const updatedBounds = actions.getBoundingClientRect();
+        const updatedButtonBounds = noButton.getBoundingClientRect();
+        const minY = Math.ceil(yesBounds.bottom - updatedBounds.top + padding / 2);
+        const maxY = Math.max(minY, updatedBounds.height - updatedButtonBounds.height - padding);
+
+        noButton.style.position = "absolute";
+        noButton.style.left = `${Math.max(padding, buttonBounds.left - bounds.left)}px`;
+        noButton.style.top = `${minY + Math.random() * (maxY - minY)}px`;
+        noButton.style.zIndex = "2";
+      }
+
+      function celebrate() {
+        const acceptedImage = {
+          src: "assets/gatito-perdon-aceptado.gif",
+          description: "Un gatito celebrando",
+        };
+        catImage.src = acceptedImage.src;
+        document
+          .querySelector(".portrait")
+          .setAttribute("aria-label", acceptedImage.description);
+        card.classList.add("success");
+        title.textContent = "¡Sabía que sí!";
+        message.innerHTML =
+          "Gracias por darme otra oportunidad.<strong> Te prometo mejorar.</strong><span class=\"question\">¡Prometo compensártelo! 💖</span>";
+        noButton.hidden = true;
+        yesButton.textContent = "¡Haz clic aquí!";
+        yesButton.disabled = false;
+        yesButton.setAttribute("aria-label", "Elige cómo puedo compensártelo");
+        status.textContent = "¡Perdón aceptado! 💕";
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        const symbols = ["♡", "♥", "✦"];
+        const colors = ["#e87591", "#f2ae75", "#ba8ab8"];
+
+        for (let index = 0; index < 36; index += 1) {
+          const piece = document.createElement("span");
+          piece.className = "confetti";
+          piece.textContent = symbols[index % symbols.length];
+          piece.style.setProperty("--left", `${Math.random() * 100}vw`);
+          piece.style.setProperty("--color", colors[index % colors.length]);
+          piece.style.setProperty("--size", `${14 + Math.random() * 18}px`);
+          piece.style.setProperty("--duration", `${2.5 + Math.random() * 2}s`);
+          piece.style.setProperty("--drift", `${Math.random() * 120 - 60}px`);
+          document.body.append(piece);
+          piece.addEventListener("animationend", () => piece.remove(), { once: true });
+        }
+      }
+
+      function openCompensationMenu() {
+        compensationForm.reset();
+        compensationForm.hidden = false;
+        appointmentForm.hidden = true;
+        dialogConfirmation.hidden = true;
+        dialogConfirmation.textContent = "";
+        delete dialogConfirmation.dataset.state;
+        dialogTitle.textContent = "¿Cómo puedo compensártelo?";
+        otherChoice.disabled = true;
+        otherChoice.required = false;
+        otherChoice.setCustomValidity("");
+        const today = localDateString(new Date());
+        appointmentDate.min = today;
+        appointmentDate.value = "";
+        appointmentTime.value = "";
+        selectedCompensation = "";
+        compensationDialog.showModal();
+      }
+
+      compensationForm.addEventListener("change", (event) => {
+        if (event.target.name !== "compensation") {
+          return;
+        }
+
+        const isOtherChoice = event.target.value === "Otra idea";
+        otherChoice.disabled = !isOtherChoice;
+        otherChoice.required = isOtherChoice;
+        otherChoice.setCustomValidity(
+          isOtherChoice && !otherChoice.value.trim()
+            ? "Escribe tu idea para poder elegirla."
+            : "",
+        );
+        if (isOtherChoice) {
+          otherChoice.focus();
+        }
+      });
+
+      otherChoice.addEventListener("input", () => {
+        otherChoice.setCustomValidity(
+          otherChoice.value.trim() ? "" : "Escribe tu idea para poder elegirla.",
+        );
+      });
+
+      compensationForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const selected = compensationForm.querySelector(
+          'input[name="compensation"]:checked',
+        );
+        if (!selected) {
+          return;
+        }
+
+        selectedCompensation =
+          selected.value === "Otra idea" ? otherChoice.value.trim() : selected.value;
+        dialogTitle.textContent = "¿Cuándo hacemos el plan?";
+        appointmentIntro.textContent = `Elegiste: ${selectedCompensation}. Ahora elige el día y la hora 💖`;
+        compensationForm.hidden = true;
+        appointmentForm.hidden = false;
+        dialogConfirmation.hidden = true;
+        appointmentDate.focus();
+      });
+
+      appointmentForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!appointmentForm.reportValidity()) {
+          return;
+        }
+
+        if (!emailConfig.serviceId || !emailConfig.templateId || !emailConfig.publicKey) {
+          showDialogMessage(
+            "La fecha y hora están listas, pero falta conectar el servicio de correo. Configura EmailJS antes de enviar.",
+            "error",
+          );
+          return;
+        }
+
+        if (!window.emailjs) {
+          showDialogMessage(
+            "No se pudo cargar el servicio de correo. Revisa tu conexión a internet e inténtalo de nuevo.",
+            "error",
+          );
+          return;
+        }
+
+        appointmentSend.disabled = true;
+        showDialogMessage("Enviando tu respuesta…", "pending");
+
+        try {
+          const date = new Date(`${appointmentDate.value}T00:00:00`);
+          const formattedDate = new Intl.DateTimeFormat("es-MX", {
+            dateStyle: "long",
+          }).format(date);
+          await window.emailjs.send(
+            emailConfig.serviceId,
+            emailConfig.templateId,
+            {
+              option: selectedCompensation,
+              date: formattedDate,
+              time: appointmentTime.value,
+            },
+            { publicKey: emailConfig.publicKey },
+          );
+          compensationForm.hidden = true;
+          appointmentForm.hidden = true;
+          dialogTitle.textContent = "¡Plan confirmado!";
+          showDialogMessage(
+            `Te elegí: ${selectedCompensation}, el ${formattedDate} a las ${appointmentTime.value}. ¡Ya me llegó tu respuesta! 💖`,
+            "success",
+          );
+        } catch (error) {
+          console.error("No se pudo enviar la respuesta por correo:", error);
+          showDialogMessage(
+            "No se pudo enviar el correo. Revisa la configuración de EmailJS y vuelve a intentarlo.",
+            "error",
+          );
+        } finally {
+          appointmentSend.disabled = false;
+        }
+      });
+
+      document.querySelector("#appointment-back").addEventListener("click", () => {
+        appointmentForm.hidden = true;
+        compensationForm.hidden = false;
+        dialogTitle.textContent = "¿Cómo puedo compensártelo?";
+        dialogConfirmation.hidden = true;
+      });
+
+      document.querySelector("#dialog-close").addEventListener("click", () => {
+        compensationDialog.close();
+      });
+
+      compensationDialog.addEventListener("close", () => {
+        compensationForm.reset();
+        compensationForm.hidden = false;
+        appointmentForm.reset();
+        appointmentForm.hidden = true;
+        dialogConfirmation.hidden = true;
+        dialogConfirmation.textContent = "";
+        delete dialogConfirmation.dataset.state;
+        dialogTitle.textContent = "¿Cómo puedo compensártelo?";
+        otherChoice.disabled = true;
+        otherChoice.required = false;
+        otherChoice.setCustomValidity("");
+        selectedCompensation = "";
+      });
+
+      noButton.addEventListener("click", moveNoButton);
+      yesButton.addEventListener("click", () => {
+        if (forgivenessAccepted) {
+          openCompensationMenu();
+          return;
+        }
+
+        forgivenessAccepted = true;
+        celebrate();
+      });
+    </script>
+  </body>
+</html>
