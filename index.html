@@ -759,13 +759,14 @@
         noButton.textContent = messages[(noAttempts - 1) % messages.length];
         status.textContent = "Esa respuesta se está haciendo difícil de alcanzar…";
 
+        noButton.style.position = "fixed";
         const buttonBounds = noButton.getBoundingClientRect();
+        card.parentElement.append(noButton);
         const paddingX = Math.min(12, (window.innerWidth - buttonBounds.width) / 2);
         const paddingY = Math.min(12, (window.innerHeight - buttonBounds.height) / 2);
         const maxX = window.innerWidth - buttonBounds.width - paddingX;
         const maxY = window.innerHeight - buttonBounds.height - paddingY;
 
-        noButton.style.position = "fixed";
         noButton.style.left = `${paddingX + Math.random() * (maxX - paddingX)}px`;
         noButton.style.top = `${paddingY + Math.random() * (maxY - paddingY)}px`;
         noButton.style.zIndex = "2";
