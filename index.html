@@ -30,8 +30,8 @@
       }
 
       body {
-        min-width: 320px;
         min-height: 100vh;
+        min-height: 100dvh;
         margin: 0;
         display: grid;
         place-items: center;
@@ -52,7 +52,9 @@
         display: grid;
         place-items: center;
         width: 100%;
+        min-width: 0;
         min-height: 100vh;
+        min-height: 100dvh;
         padding: 24px;
         isolation: isolate;
       }
@@ -89,6 +91,7 @@
 
       .card {
         width: min(100%, 390px);
+        min-width: 0;
         padding: 34px 30px 30px;
         border: 1px solid rgb(255 255 255 / 85%);
         border-radius: 30px;
@@ -168,6 +171,7 @@
       .actions {
         position: relative;
         display: flex;
+        min-width: 0;
         justify-content: center;
         align-items: center;
         gap: 13px;
@@ -258,8 +262,10 @@
       .compensation-dialog {
         width: min(440px, calc(100% - 32px));
         max-height: min(90vh, 760px);
+        max-height: min(90dvh, 760px);
         padding: 30px;
         overflow-y: auto;
+        overscroll-behavior: contain;
         border: 1px solid rgb(255 255 255 / 90%);
         border-radius: 26px;
         color: #49363a;
@@ -288,14 +294,16 @@
       .dialog-title {
         margin: 0 0 20px;
         font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(1.7rem, 7vw, 2.15rem);
+        font-size: clamp(1.35rem, 7vw, 2.15rem);
         line-height: 1.15;
+        overflow-wrap: anywhere;
         text-align: center;
       }
 
       .choice-list {
         display: grid;
         gap: 10px;
+        min-width: 0;
         margin: 0;
         padding: 0;
         border: 0;
@@ -364,6 +372,7 @@
       .appointment-field {
         display: grid;
         gap: 7px;
+        min-width: 0;
         color: #68575a;
         font-size: 0.9rem;
         font-weight: 700;
@@ -371,6 +380,7 @@
 
       .appointment-field input {
         width: 100%;
+        min-width: 0;
         min-height: 46px;
         padding: 9px 11px;
         border: 1px solid #e8dadd;
@@ -512,6 +522,39 @@
 
         .decoration-two {
           right: 6%;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .page {
+          padding: 12px;
+        }
+
+        .card {
+          padding: 26px 18px 22px;
+        }
+
+        .actions {
+          flex-wrap: wrap;
+        }
+
+        .appointment-actions {
+          flex-direction: column;
+        }
+
+        .appointment-actions .answer {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+
+      @media (max-height: 700px) {
+        body {
+          align-items: start;
+        }
+
+        .page {
+          align-items: start;
         }
       }
 
@@ -716,15 +759,33 @@
         noButton.textContent = messages[(noAttempts - 1) % messages.length];
         status.textContent = "Esa respuesta se está haciendo difícil de alcanzar…";
 
-        const padding = 12;
         const buttonBounds = noButton.getBoundingClientRect();
-        const maxX = Math.max(padding, window.innerWidth - buttonBounds.width - padding);
-        const maxY = Math.max(padding, window.innerHeight - buttonBounds.height - padding);
+        const paddingX = Math.min(12, (window.innerWidth - buttonBounds.width) / 2);
+        const paddingY = Math.min(12, (window.innerHeight - buttonBounds.height) / 2);
+        const maxX = window.innerWidth - buttonBounds.width - paddingX;
+        const maxY = window.innerHeight - buttonBounds.height - paddingY;
 
         noButton.style.position = "fixed";
-        noButton.style.left = `${padding + Math.random() * (maxX - padding)}px`;
-        noButton.style.top = `${padding + Math.random() * (maxY - padding)}px`;
+        noButton.style.left = `${paddingX + Math.random() * (maxX - paddingX)}px`;
+        noButton.style.top = `${paddingY + Math.random() * (maxY - paddingY)}px`;
         noButton.style.zIndex = "2";
+      }
+
+      function keepNoButtonInViewport() {
+        if (noButton.hidden || noButton.style.position !== "fixed") {
+          return;
+        }
+
+        const bounds = noButton.getBoundingClientRect();
+        const paddingX = Math.min(12, (window.innerWidth - bounds.width) / 2);
+        const paddingY = Math.min(12, (window.innerHeight - bounds.height) / 2);
+        const maxX = window.innerWidth - bounds.width - paddingX;
+        const maxY = window.innerHeight - bounds.height - paddingY;
+        const left = Number.parseFloat(noButton.style.left) || 0;
+        const top = Number.parseFloat(noButton.style.top) || 0;
+
+        noButton.style.left = `${Math.min(maxX, Math.max(paddingX, left))}px`;
+        noButton.style.top = `${Math.min(maxY, Math.max(paddingY, top))}px`;
       }
 
       function celebrate() {
@@ -929,6 +990,7 @@
       });
 
       noButton.addEventListener("click", moveNoButton);
+      window.addEventListener("resize", keepNoButtonInViewport);
       yesButton.addEventListener("click", () => {
         if (forgivenessAccepted) {
           openCompensationMenu();
